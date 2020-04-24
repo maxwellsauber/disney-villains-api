@@ -9,7 +9,8 @@ const getAllVillains = async (request, response) => {
 const getVillainBySlug = async (request, response) => {
   const { slug } = request.params
 
-  const matchingVillains = await models.villains.findOne({ where: { slug }, attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] } })
+  const matchingVillains = await models.villains
+    .findOne({ where: { slug }, attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] } })
 
   return matchingVillains
     ? response.send(matchingVillains)
