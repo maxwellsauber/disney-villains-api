@@ -31,8 +31,6 @@ const createNewVillain = async (request, response) => {
     name, movie, slug
   })
 
-  // Example Test Data:  { "name" : "Bob", "movie" : "The BOB attacks 3D", "slug" : "bob" }
-
   return response.status(201).send(newVillain)
 }
 
