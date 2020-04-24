@@ -1,7 +1,8 @@
 const models = require('../models')
 
 const getAllVillains = async (request, response) => {
-  const villains = await models.villains.findAll({ attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] } })
+  const villains = await models.villains
+    .findAll({ attributes: { exclude: ['id', 'createdAt', 'updatedAt', 'deletedAt'] } })
 
   return response.send(villains)
 }
@@ -10,7 +11,7 @@ const getVillainBySlug = async (request, response) => {
   const { slug } = request.params
 
   const matchingVillains = await models.villains
-    .findOne({ where: { slug }, attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] } })
+    .findOne({ where: { slug }, attributes: { exclude: ['id', 'createdAt', 'updatedAt', 'deletedAt'] } })
 
   return matchingVillains
     ? response.send(matchingVillains)
