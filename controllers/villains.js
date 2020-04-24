@@ -16,7 +16,8 @@ const getVillainBySlug = async (request, response) => {
 
   return matchingVillains
     ? response.send(matchingVillains)
-    : response.sendStatus(404)
+    : response.status(404)
+      .send(`You poor, simple fool. Thinking you could request "${slug}" from me. Me! The mistress of all evil!`)
 }
 
 const createNewVillain = async (request, response) => {
@@ -25,7 +26,7 @@ const createNewVillain = async (request, response) => {
   if (!name || !movie || !slug) {
     return response
       .status(400)
-      .send('The following fields are required: name, movie, slug')
+      .send(`O Queen, here art the fairest required fields in the land: ${villainAttributes.join(', ')}`)
   }
 
   const newVillain = await models.villains.create({
@@ -36,4 +37,3 @@ const createNewVillain = async (request, response) => {
 }
 
 module.exports = { getAllVillains, getVillainBySlug, createNewVillain }
-
