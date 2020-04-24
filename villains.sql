@@ -17,7 +17,7 @@ CREATE TABLE villains (
   PRIMARY KEY(id)
 );
 
-INSERT INTO villains (name, movie, slug) VALUES ('Captain Hook', 'Peter Pan', 'captain-hoouserk');
+INSERT INTO villains (name, movie, slug) VALUES ('Captain Hook', 'Peter Pan', 'captain-hook');
 INSERT INTO villains (name, movie, slug) VALUES ('Cruella de Vil', 'One Hundred and One Dalmatians', 'cruella-de-vil');
 INSERT INTO villains (name, movie, slug) VALUES ('Gaston', 'Beauty and the Beast', 'gaston');
 INSERT INTO villains (name, movie, slug) VALUES ('Hades', 'Hercules', 'hades');
