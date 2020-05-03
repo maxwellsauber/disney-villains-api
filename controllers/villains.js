@@ -9,7 +9,7 @@ const getAllVillains = async (request, response) => {
     return response.send(villains)
   }
   catch (error) {
-    return response.status(500).send('GET ALL 500 ERROR')
+    return response.status(500).send('He\'s a 500 Error! They\'re all the same')
   }
 }
 
@@ -26,24 +26,29 @@ const getVillainBySlug = async (request, response) => {
         .send(`You poor, simple fool. Thinking you could request "${slug}" from me. Me! The mistress of all evil!`)
   }
   catch (error) {
-    return response.status(500).send('GET BY SLUG 500 ERROR')
+    return response.status(500).send('Off with their 500 errors!')
   }
 }
 
 const createNewVillain = async (request, response) => {
-  const { name, movie, slug } = request.body
+  try {
+    const { name, movie, slug } = request.body
 
-  if (!name || !movie || !slug) {
-    return response
-      .status(400)
-      .send(`O Queen, here art the fairest required fields in the land: ${villainAttributes.join(', ')}`)
+    if (!name || !movie || !slug) {
+      return response
+        .status(400)
+        .send(`O Queen, here art the fairest required fields in the land: ${villainAttributes.join(', ')}`)
+    }
+
+    const newVillain = await models.villains.create({
+      name, movie, slug
+    })
+
+    return response.status(201).send(newVillain)
   }
-
-  const newVillain = await models.villains.create({
-    name, movie, slug
-  })
-
-  return response.status(201).send(newVillain)
+  catch (error) {
+    return response.status(500).send('A 500 error am I? Perhaps you\'d like to see how 500 error like I can be!')
+  }
 }
 
 module.exports = { getAllVillains, getVillainBySlug, createNewVillain }

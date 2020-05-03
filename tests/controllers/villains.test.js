@@ -6,7 +6,7 @@ const models = require('../../models')
 const {
   after, afterEach, before, beforeEach, describe, it
 } = require('mocha')
-const { villainsList, matchingVillain } = require('../mocks/villains')
+const { villainsList, matchingVillain, newVillain } = require('../mocks/villains')
 const { getAllVillains, getVillainBySlug, createNewVillain } = require('../../controllers/villains.js')
 
 const villainAttributes = ['name', 'movie', 'slug']
@@ -15,32 +15,33 @@ chai.use(sinonChai)
 const { expect } = chai
 
 describe('Controllers - villains', () => {
+  let response
   let sandbox
+  let stubbedCreate
   let stubbedFindAll
   let stubbedFindOne
-  let stubbedCreate
   let stubbedSend
-  let response
   let stubbedSendStatus
-  let stubbedStatusDotSend
   let stubbedStatus
+  let stubbedStatusDotSend
 
   before(() => {
     sandbox = sinon.createSandbox()
 
+    stubbedCreate = sandbox.stub(models.villains, 'create')
     stubbedFindAll = sandbox.stub(models.villains, 'findAll')
     stubbedFindOne = sandbox.stub(models.villains, 'findOne')
-    stubbedCreate = sandbox.stub(models.villains, 'create')
 
     stubbedSend = sandbox.stub()
     stubbedSendStatus = sandbox.stub()
-    stubbedStatusDotSend = sandbox.stub()
     stubbedStatus = sandbox.stub()
+
+    stubbedStatusDotSend = sandbox.stub()
 
     response = {
       send: stubbedSend,
-      sendStatus: stubbedSendStatus,
       status: stubbedStatus,
+      sendStatus: stubbedSendStatus,
     }
   })
 
@@ -74,7 +75,7 @@ describe('Controllers - villains', () => {
 
       expect(stubbedFindAll).to.have.callCount(1)
       expect(stubbedStatus).to.have.been.calledWith(500)
-      expect(stubbedStatusDotSend).to.have.been.calledWith('GET ALL 500 ERROR')
+      expect(stubbedStatusDotSend).to.have.been.calledWith('He\'s a 500 Error! They\'re all the same')
     })
   })
 
@@ -109,12 +110,44 @@ describe('Controllers - villains', () => {
 
       expect(stubbedFindOne).to.have.been.calledWith({ where: { slug: 'error-not-found' }, attributes: villainAttributes })
       expect(stubbedStatus).to.have.been.calledWith(500)
-      expect(stubbedStatusDotSend).to.have.been.calledWith('GET BY SLUG 500 ERROR')
+      expect(stubbedStatusDotSend).to.have.been.calledWith('Off with their 500 errors!')
     })
   })
 
-  // AT BAT! CREATE THE NEW VILLAIN TESTS
   describe('createNewVillain', () => {
+    it('accepts new villain details and saves them as a new villain in the database, returning the saved record with a 201 status', async () => {
+      const request = { body: newVillain }
 
+      stubbedCreate.returns(newVillain)
+
+      await createNewVillain(request, response)
+
+      expect(stubbedCreate).to.have.been.calledWith(newVillain)
+      expect(stubbedStatus).to.have.been.calledWith(201)
+      expect(stubbedStatusDotSend).to.have.been.calledWith(newVillain)
+    })
+
+    it('returns a 400 status when not all required fields are provided (Example: missing required "name")', async () => {
+      const { movie, slug } = newVillain
+      const request = { body: { movie, slug } }
+
+      await createNewVillain(request, response)
+
+      expect(stubbedCreate).to.have.callCount(0)
+      expect(stubbedStatus).to.have.been.calledWith(400)
+      expect(stubbedStatusDotSend).to.have.been.calledWith('O Queen, here art the fairest required fields in the land: name, movie, slug')
+    })
+
+    it('returns a 500 status when an error occurs saving a new villain', async () => {
+      const request = { body: newVillain }
+
+      stubbedCreate.throws('ERROR!')
+
+      await createNewVillain(request, response)
+
+      expect(stubbedCreate).to.have.been.calledWith(newVillain)
+      expect(stubbedStatus).to.have.been.calledWith(500)
+      expect(stubbedStatusDotSend).to.have.been.calledWith('A 500 error am I? Perhaps you\'d like to see how 500 error like I can be!')
+    })
   })
 })
