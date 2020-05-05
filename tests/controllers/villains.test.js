@@ -21,7 +21,6 @@ describe('Controllers - villains', () => {
   let stubbedFindAll
   let stubbedFindOne
   let stubbedSend
-  let stubbedSendStatus
   let stubbedStatus
   let stubbedStatusDotSend
 
@@ -33,15 +32,13 @@ describe('Controllers - villains', () => {
     stubbedFindOne = sandbox.stub(models.villains, 'findOne')
 
     stubbedSend = sandbox.stub()
-    stubbedSendStatus = sandbox.stub()
     stubbedStatus = sandbox.stub()
-
     stubbedStatusDotSend = sandbox.stub()
 
     response = {
       send: stubbedSend,
       status: stubbedStatus,
-      sendStatus: stubbedSendStatus,
+      sendStatus: stubbedStatusDotSend,
     }
   })
 
