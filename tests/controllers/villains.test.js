@@ -58,7 +58,7 @@ describe('Controllers - villains', () => {
   })
 
   describe('getAllVillains', () => {
-    it('Retrieves a list of villains from the database and calls response.send() with the list.', async () => {
+    it('retrieves a list of villains from the database and calls response.send() with the list.', async () => {
       stubbedFindAll.returns(villainsList)
 
       await getAllVillains({}, response)
@@ -80,7 +80,7 @@ describe('Controllers - villains', () => {
   })
 
   describe('getVillainBySlug', () => {
-    it('retrieves the villian associated with the provided slug from the database and calls response.send() with it', async () => {
+    it('retrieves the villain associated with the provided slug from the database and calls response.send() with it', async () => {
       const request = { params: { slug: 'gaston' } }
 
       stubbedFindOne.returns(matchingVillain)
@@ -101,7 +101,7 @@ describe('Controllers - villains', () => {
       expect(stubbedStatusDotSend).to.have.been.calledWith('You poor, simple fool. Thinking you could request "not-found" from me. Me! The mistress of all evil!')
     })
 
-    it('returns a 500 status when an error occurs retrieving a villian by slug', async () => {
+    it('returns a 500 status when an error occurs retrieving a villain by slug', async () => {
       const request = { params: { slug: 'error-not-found' } }
 
       stubbedFindOne.throws('ERROR!')
